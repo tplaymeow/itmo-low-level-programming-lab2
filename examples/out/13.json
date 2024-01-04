@@ -1,0 +1,10 @@
+{
+  "select": {
+    "table_name": "Abobus",
+    "join": {
+      "join_table": "User",
+      "table_column": "name",
+      "join_table_column": "abobus_name"
+    }
+  }
+}

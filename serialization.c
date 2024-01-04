@@ -215,34 +215,33 @@ static void serialize_filter(struct serialization_context *context,
   switch (filter.type) {
   case SQL_AST_FILTER_TYPE_ALL:
     break;
-  case SQL_AST_FILTER_TYPE_COMPARISON:
+  case SQL_AST_FILTER_TYPE_COMPARISON: {
     serialize_obj_field_begin(context, name);
     serialize_obj_field_begin(context, "comparison");
-            serialize_string_field(context, "operator", comparison_operator_to_string[filter.value.comparison.operator], false);
-            serialize_operand(context, "left", filter.value.comparison.left,
-                              false);
-            serialize_operand(context, "right", filter.value.comparison.right,
-                              true);
-            serialize_obj_end(context, true);
-            serialize_obj_end(context, is_last);
-            break;
-  case SQL_AST_FILTER_TYPE_CONTAINS:
+      serialize_string_field(context, "operator", comparison_operator_to_string[filter.value.comparison.operator],
+                             false);
+      serialize_operand(context, "left", filter.value.comparison.left, false);
+      serialize_operand(context, "right", filter.value.comparison.right, true);
+      serialize_obj_end(context, true);
+      serialize_obj_end(context, is_last);
+  } break;
+  case SQL_AST_FILTER_TYPE_CONTAINS: {
     serialize_obj_field_begin(context, name);
     serialize_obj_field_begin(context, "contains");
     serialize_text_operand(context, "left", filter.value.contains.left, false);
     serialize_text_operand(context, "right", filter.value.contains.right, true);
     serialize_obj_end(context, true);
     serialize_obj_end(context, is_last);
-    break;
-  case SQL_AST_FILTER_TYPE_LOGIC:
+  } break;
+  case SQL_AST_FILTER_TYPE_LOGIC: {
     serialize_obj_field_begin(context, name);
     serialize_obj_field_begin(context, "logic");
-            serialize_string_field(context, "operator", logic_operator_to_string[filter.value.logic.operator], false);
-            serialize_filter(context, "left", *filter.value.logic.left, false);
-            serialize_filter(context, "right", *filter.value.logic.right, true);
-            serialize_obj_end(context, true);
-            serialize_obj_end(context, is_last);
-            break;
+      serialize_string_field(context, "operator", logic_operator_to_string[filter.value.logic.operator], false);
+      serialize_filter(context, "left", *filter.value.logic.left, false);
+      serialize_filter(context, "right", *filter.value.logic.right, true);
+      serialize_obj_end(context, true);
+      serialize_obj_end(context, is_last);
+  } break;
   default:
     break;
   }
@@ -252,9 +251,17 @@ static void
 serialize_select_statement(struct serialization_context *context,
                            struct sql_ast_select_statement statement) {
   serialize_obj_begin(context);
-  serialize_obj_field_begin(context, "create");
+  serialize_obj_field_begin(context, "select");
   serialize_string_field(context, "table_name", statement.table_name,
+                         !statement.join.has_value &&
                          statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
+  if (statement.join.has_value) {
+      serialize_obj_field_begin(context, "join");
+      serialize_string_field(context, "join_table", statement.join.value.join_table, false);
+      serialize_string_field(context, "table_column", statement.join.value.table_column, false);
+      serialize_string_field(context, "join_table_column", statement.join.value.join_table_column, true);
+      serialize_obj_end(context, statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
+  }
   serialize_filter(context, "filter", statement.filter, true);
   serialize_obj_end(context, true);
   serialize_obj_end(context, true);

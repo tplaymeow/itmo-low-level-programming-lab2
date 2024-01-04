@@ -29,8 +29,10 @@ void yyerror_lexer(const char* s);
 "and" {return AND;}
 "or" {return OR;}
 "contains" {return CONTAINS;}
+"join" {return JOIN;}
+"on" {return ON;}
 "=" {return ASSIGN;}
-"==" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_EQUAL; return COMPARISON_OPERATOR;}
+"==" {return COMPARISON_OPERATOR_EQUAL;}
 "!=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_NOT_EQUAL; return COMPARISON_OPERATOR;}
 ">" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_GREATER; return COMPARISON_OPERATOR;}
 ">=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_GREATER_OR_EQUAL; return COMPARISON_OPERATOR;}

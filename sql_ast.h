@@ -126,6 +126,17 @@ struct sql_ast_filter {
   union sql_ast_filter_value value;
 };
 
+struct sql_ast_join {
+  char *join_table;
+  char *table_column;
+  char *join_table_column;
+};
+
+struct sql_ast_join_optional {
+  bool has_value;
+  struct sql_ast_join value;
+};
+
 struct sql_ast_column_with_literal {
   char *name;
   struct sql_ast_literal literal;
@@ -160,6 +171,7 @@ struct sql_ast_insert_statement {
 
 struct sql_ast_select_statement {
   char *table_name;
+  struct sql_ast_join_optional join;
   struct sql_ast_filter filter;
 };
 

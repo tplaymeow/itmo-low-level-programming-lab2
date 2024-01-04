@@ -125,6 +125,11 @@ void sql_ast_statement_free(struct sql_ast_statement statement) {
   } break;
   case SQL_AST_STATEMENT_TYPE_SELECT: {
     free(statement.value.select.table_name);
+    if (statement.value.select.join.has_value) {
+      free(statement.value.select.join.value.join_table);
+      free(statement.value.select.join.value.table_column);
+      free(statement.value.select.join.value.join_table_column);
+    }
     sql_ast_filter_free(statement.value.select.filter);
   } break;
   case SQL_AST_STATEMENT_TYPE_DELETE: {

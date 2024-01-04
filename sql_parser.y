@@ -43,6 +43,7 @@ void yyerror(const char* s);
     struct sql_ast_column_with_literal_list *column_with_literal_list_val;
     struct sql_ast_text_operand text_operand_val;
     struct sql_ast_contains contains_val;
+    struct sql_ast_join_optional join_val;
 }
 
 %token<boolean_val> BOOLEAN_VAL
@@ -51,7 +52,7 @@ void yyerror(const char* s);
 %token<text_val> TEXT_VAL
 %token<identifier_val> IDENTIFIER
 %token<comparison_operator_val> COMPARISON_OPERATOR
-%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN CONTAINS
+%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN CONTAINS JOIN ON COMPARISON_OPERATOR_EQUAL
 
 %type<statement_val> statement
 %type<create_statement_val> create_statement
@@ -73,6 +74,7 @@ void yyerror(const char* s);
 %type<column_with_literal_list_val> column_with_literal_list
 %type<text_operand_val> text_operand
 %type<contains_val> contains
+%type<join_val> join
 
 %start input
 
@@ -153,10 +155,11 @@ insert_statement
     ;
 
 select_statement
-    : SELECT FROM IDENTIFIER where {
+    : SELECT FROM IDENTIFIER join where {
         $$ = (struct sql_ast_select_statement) {
             .table_name = $3,
-            .filter = $4
+            .join = $4,
+            .filter = $5
         };
     }
     ;
@@ -175,6 +178,24 @@ delete_statement
         $$ = (struct sql_ast_delete_statement) {
             .table_name = $3,
             .filter = $4
+        };
+    }
+    ;
+
+join
+    : {
+        $$ = (struct sql_ast_join_optional) {
+            .has_value = false
+        };
+    }
+    | JOIN IDENTIFIER ON IDENTIFIER COMPARISON_OPERATOR_EQUAL IDENTIFIER {
+        $$ = (struct sql_ast_join_optional) {
+            .has_value = true,
+            .value = (struct sql_ast_join) {
+                .join_table = $2,
+                .table_column = $4,
+                .join_table_column = $6
+            }
         };
     }
     ;
@@ -259,6 +280,13 @@ comparison
     : operand COMPARISON_OPERATOR operand {
         $$ = (struct sql_ast_comparison) {
             .operator = $2,
+            .left = $1,
+            .right = $3
+        };
+    }
+    | operand COMPARISON_OPERATOR_EQUAL operand {
+        $$ = (struct sql_ast_comparison) {
+            .operator = SQL_AST_COMPARISON_OPERATOR_EQUAL,
             .left = $1,
             .right = $3
         };
