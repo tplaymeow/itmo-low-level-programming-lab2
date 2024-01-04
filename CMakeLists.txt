@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 project(itmo_low_level_programming_lab2 C)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
     execute_process(
