@@ -1,5 +1,5 @@
 {
-  "create": {
+  "select": {
     "table_name": "Abobus",
     "filter": {
       "logic": {
