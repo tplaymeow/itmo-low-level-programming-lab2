@@ -26,8 +26,8 @@ jobs:
 
       - name: Install Valgrind
         run: |
-          apt update
-          apt install -y valgrind
+          apt-get update
+          apt-get install -y valgrind
 
       - name: Configure CMake
         run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DCMAKE_BUILD_TYPE=Debug -S ${{ github.workspace }}
