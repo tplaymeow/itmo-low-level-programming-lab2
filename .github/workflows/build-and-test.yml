@@ -89,4 +89,13 @@ jobs:
       - name: Test
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: |
-          echo "select from Users where (age > 18 and age <= 50) or (is_admin == true or name == "Admin" and age != 10);" | ${{ matrix.executable_path }}
+          cat ../examples/in/1.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/2.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/3.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/4.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/5.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/6.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/7.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/8.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/9.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/10.sql | ${{ matrix.executable_path }}
