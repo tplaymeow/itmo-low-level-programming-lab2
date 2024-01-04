@@ -39,3 +39,17 @@ jobs:
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: |
           cat ../examples/in/1.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/2.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/3.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/4.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/5.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/6.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/7.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/8.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/9.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/10.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/11.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/12.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/13.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+          cat ../examples/in/14.sql | valgrind --tool=massif ./itmo_low_level_programming_lab2
+
