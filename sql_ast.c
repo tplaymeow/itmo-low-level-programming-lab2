@@ -1,6 +1,17 @@
 #include "sql_ast.h"
 #include <stdlib.h>
 
+static void sql_ast_literal_free(struct sql_ast_literal literal) {
+  switch (literal.type) {
+  case SQL_AST_DATA_TYPE_INTEGER:
+  case SQL_AST_DATA_TYPE_FLOATING_POINT:
+  case SQL_AST_DATA_TYPE_BOOLEAN:
+    break;
+  case SQL_AST_DATA_TYPE_TEXT:
+    free(literal.value.text);
+  }
+}
+
 struct sql_ast_column_with_type_list *sql_ast_column_with_type_list_create(
     struct sql_ast_column_with_type item,
     struct sql_ast_column_with_type_list *next) {
@@ -17,6 +28,8 @@ void sql_ast_column_with_type_list_free(
   while (next != NULL) {
     struct sql_ast_column_with_type_list *current = next;
     next = next->next;
+
+    free(current->item.name);
     free(current);
   }
 }
@@ -36,6 +49,8 @@ void sql_ast_literal_list_free(struct sql_ast_literal_list *list) {
   while (next != NULL) {
     struct sql_ast_literal_list *current = next;
     next = next->next;
+
+    sql_ast_literal_free(current->item);
     free(current);
   }
 }
@@ -57,15 +72,30 @@ void sql_ast_column_with_literal_list_free(
   while (next != NULL) {
     struct sql_ast_column_with_literal_list *current = next;
     next = next->next;
+
+    sql_ast_literal_free(current->item.literal);
+    free(current->item.name);
     free(current);
+  }
+}
+
+static void sql_ast_operand_free(struct sql_ast_operand operand) {
+  switch (operand.type) {
+  case SQL_AST_OPERAND_TYPE_COLUMN:
+    free(operand.value.column);
+    break;
+  case SQL_AST_OPERAND_TYPE_LITERAL:
+    sql_ast_literal_free(operand.value.literal);
+    break;
   }
 }
 
 static void sql_ast_filter_free(struct sql_ast_filter filter) {
   switch (filter.type) {
   case SQL_AST_FILTER_TYPE_ALL:
-    break;
   case SQL_AST_FILTER_TYPE_COMPARISON:
+    sql_ast_operand_free(filter.value.comparison.left);
+    sql_ast_operand_free(filter.value.comparison.right);
     break;
   case SQL_AST_FILTER_TYPE_LOGIC:
     sql_ast_filter_free(*filter.value.logic.left);
