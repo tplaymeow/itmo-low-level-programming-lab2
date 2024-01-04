@@ -1,0 +1,105 @@
+{
+  "create": {
+    "table_name": "Users",
+    "filter": {
+      "logic": {
+        "operator": "OR",
+        "left": {
+          "logic": {
+            "operator": "AND",
+            "left": {
+              "comparison": {
+                "operator": "GREATER",
+                "left": {
+                  "column": {
+                    "column_name": "age"
+                  }
+                },
+                "right": {
+                  "literal": {
+                    "type": "integer",
+                    "value": 18
+                  }
+                }
+              }
+            },
+            "right": {
+              "comparison": {
+                "operator": "LESS_OR_EQUAL",
+                "left": {
+                  "column": {
+                    "column_name": "age"
+                  }
+                },
+                "right": {
+                  "literal": {
+                    "type": "integer",
+                    "value": 50
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "logic": {
+            "operator": "OR",
+            "left": {
+              "comparison": {
+                "operator": "EQUAL",
+                "left": {
+                  "column": {
+                    "column_name": "is_admin"
+                  }
+                },
+                "right": {
+                  "literal": {
+                    "type": "bool",
+                    "value": true
+                  }
+                }
+              }
+            },
+            "right": {
+              "logic": {
+                "operator": "AND",
+                "left": {
+                  "comparison": {
+                    "operator": "EQUAL",
+                    "left": {
+                      "column": {
+                        "column_name": "name"
+                      }
+                    },
+                    "right": {
+                      "literal": {
+                        "type": "text",
+                        "value": "Admin"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "comparison": {
+                    "operator": "NOT_EQUAL",
+                    "left": {
+                      "column": {
+                        "column_name": "age"
+                      }
+                    },
+                    "right": {
+                      "literal": {
+                        "type": "integer",
+                        "value": 10
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

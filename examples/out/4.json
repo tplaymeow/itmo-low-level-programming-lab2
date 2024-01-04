@@ -1,0 +1,11 @@
+{
+  "create": {
+    "table_name": "Author",
+    "columns": [
+      {
+        "name": "id",
+        "type": "integer"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
-project(itmo_low_level_programming_lab2 C)
 cmake_minimum_required(VERSION 3.26)
+project(itmo_low_level_programming_lab2 C)
 set(CMAKE_C_STANDARD 11)
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
@@ -26,6 +26,9 @@ if (CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
     endif ()
 endif ()
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/externals/sanitizers-cmake/cmake" ${CMAKE_MODULE_PATH})
+find_package(Sanitizers)
+
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
@@ -42,4 +45,9 @@ add_executable(itmo_low_level_programming_lab2
         "${LEXER_OUT}"
         sql_ast.c
         sql_ast.h
+        serialization.c
+        serialization.h
 )
+add_sanitizers(itmo_low_level_programming_lab2)
+
+include(scripts/format.cmake)

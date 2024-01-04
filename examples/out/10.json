@@ -1,0 +1,84 @@
+{
+  "create": {
+    "table_name": "Abobus",
+    "filter": {
+      "logic": {
+        "operator": "AND",
+        "left": {
+          "comparison": {
+            "operator": "EQUAL",
+            "left": {
+              "column": {
+                "column_name": "name"
+              }
+            },
+            "right": {
+              "literal": {
+                "type": "text",
+                "value": "Avtobus"
+              }
+            }
+          }
+        },
+        "right": {
+          "logic": {
+            "operator": "AND",
+            "left": {
+              "logic": {
+                "operator": "OR",
+                "left": {
+                  "comparison": {
+                    "operator": "EQUAL",
+                    "left": {
+                      "column": {
+                        "column_name": "color"
+                      }
+                    },
+                    "right": {
+                      "literal": {
+                        "type": "text",
+                        "value": "Red"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "comparison": {
+                    "operator": "EQUAL",
+                    "left": {
+                      "column": {
+                        "column_name": "color"
+                      }
+                    },
+                    "right": {
+                      "literal": {
+                        "type": "text",
+                        "value": "Blue"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "right": {
+              "comparison": {
+                "operator": "GREATER_OR_EQUAL",
+                "left": {
+                  "column": {
+                    "column_name": "age"
+                  }
+                },
+                "right": {
+                  "literal": {
+                    "type": "integer",
+                    "value": 35
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

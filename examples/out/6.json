@@ -1,0 +1,5 @@
+{
+  "delete": {
+    "table_name": "Users"
+  }
+}

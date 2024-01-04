@@ -44,7 +44,13 @@ void yyerror_lexer(const char* s);
 [0-9]+\.[0-9]+ 	{yylval.floating_val = atof(yytext); return FLOATING_VAL;}
 [0-9]+ {yylval.integer_val = atoi(yytext); return INTEGER_VAL;}
 [a-zA-Z_][a-zA-Z0-9_]* {yylval.identifier_val = strdup(yytext); return IDENTIFIER;}
-\"([^\\\"]|\\.)*\"  {yylval.text_val = strdup(yytext); return TEXT_VAL;}
+\"([^\\\"]|\\.)*\"  {
+    size_t size = strlen(yytext);
+    yylval.text_val = malloc(size - 1);
+    strncpy(yylval.text_val, yytext + 1, size - 2);
+    yylval.text_val[size - 2] = '\0';
+    return TEXT_VAL;
+}
 
 [ \t\n] {}
 

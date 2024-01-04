@@ -11,6 +11,7 @@ void yyerror(const char* s);
 
 %code requires {
 #include "../sql_ast.h"
+#include "../serialization.h"
 }
 
 %union {
@@ -75,7 +76,8 @@ void yyerror(const char* s);
 
 input
     : statement SEMICOLON {
-        printf("%s", $1.value.select.table_name);
+        struct serialization_context *ctx = serialization_context_create();
+        serialize(ctx, $1);
     }
     ;
 

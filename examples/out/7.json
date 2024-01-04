@@ -1,0 +1,21 @@
+{
+  "delete": {
+    "table_name": "Users",
+    "filter": {
+      "comparison": {
+        "operator": "EQUAL",
+        "left": {
+          "column": {
+            "column_name": "name"
+          }
+        },
+        "right": {
+          "literal": {
+            "type": "text",
+            "value": "Timur"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "create": {
+    "table_name": "Users",
+    "columns": [
+      {
+        "name": "is_admin",
+        "type": "bool"
+      },
+      {
+        "name": "rating",
+        "type": "float"
+      },
+      {
+        "name": "age",
+        "type": "integer"
+      },
+      {
+        "name": "name",
+        "type": "text"
+      }
+    ]
+  }
+}
