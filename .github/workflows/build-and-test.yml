@@ -25,10 +25,12 @@ jobs:
             executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: clang
+            install_bison_flex: brew install bison flex
             build_type: Release
             executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: gcc
+            install_bison_flex: brew install bison flex
             build_type: Release
             executable_path: ./itmo_low_level_programming_lab2
           - os: windows-latest
@@ -49,12 +51,14 @@ jobs:
             executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: clang
+            install_bison_flex: brew install bison flex
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
             executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: gcc
+            install_bison_flex: brew install bison flex
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
@@ -73,6 +77,9 @@ jobs:
         shell: bash
         run: |
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Install Bison and Flex
+        run: ${{ matrix.install_bison_flex }}
 
       - name: Configure CMake
         run: >
