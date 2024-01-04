@@ -15,11 +15,11 @@ void yyerror(const char* s);
 }
 
 %union {
-	bool boolean_val;
-	double floating_val;
-	int32_t integer_val;
-	char *text_val;
-	char *identifier_val;
+    bool boolean_val;
+    double floating_val;
+    int32_t integer_val;
+    char *text_val;
+    char *identifier_val;
 
     enum sql_ast_comparison_operator comparison_operator_val;
 
@@ -41,6 +41,8 @@ void yyerror(const char* s);
     struct sql_ast_filter filter_val;
     struct sql_ast_column_with_literal column_with_literal_val;
     struct sql_ast_column_with_literal_list *column_with_literal_list_val;
+    struct sql_ast_text_operand text_operand_val;
+    struct sql_ast_contains contains_val;
 }
 
 %token<boolean_val> BOOLEAN_VAL
@@ -49,7 +51,7 @@ void yyerror(const char* s);
 %token<text_val> TEXT_VAL
 %token<identifier_val> IDENTIFIER
 %token<comparison_operator_val> COMPARISON_OPERATOR
-%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN
+%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN CONTAINS
 
 %type<statement_val> statement
 %type<create_statement_val> create_statement
@@ -69,6 +71,8 @@ void yyerror(const char* s);
 %type<filter_val> filter where
 %type<column_with_literal_val> column_with_literal
 %type<column_with_literal_list_val> column_with_literal_list
+%type<text_operand_val> text_operand
+%type<contains_val> contains
 
 %start input
 
@@ -209,6 +213,12 @@ filter
             .value.comparison = $1
         };
     }
+    | contains {
+        $$  = (struct sql_ast_filter) {
+            .type = SQL_AST_FILTER_TYPE_CONTAINS,
+            .value.contains = $1
+        };
+    }
     | logic {
         $$  = (struct sql_ast_filter) {
             .type = SQL_AST_FILTER_TYPE_LOGIC,
@@ -237,12 +247,35 @@ logic
     }
     ;
 
+contains
+    : text_operand CONTAINS text_operand {
+        $$ = (struct sql_ast_contains) {
+            .left = $1, .right = $3
+        };
+    }
+    ;
+
 comparison
     : operand COMPARISON_OPERATOR operand {
         $$ = (struct sql_ast_comparison) {
             .operator = $2,
             .left = $1,
             .right = $3
+        };
+    }
+    ;
+
+text_operand
+    : IDENTIFIER {
+        $$ = (struct sql_ast_text_operand) {
+            .type = SQL_AST_OPERAND_TYPE_COLUMN,
+            .value.column = $1
+        };
+    }
+    | TEXT_VAL {
+        $$ = (struct sql_ast_text_operand) {
+            .type = SQL_AST_OPERAND_TYPE_LITERAL,
+            .value.literal = $1
         };
     }
     ;

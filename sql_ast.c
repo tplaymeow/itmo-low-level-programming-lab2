@@ -97,6 +97,10 @@ static void sql_ast_filter_free(struct sql_ast_filter filter) {
     sql_ast_operand_free(filter.value.comparison.left);
     sql_ast_operand_free(filter.value.comparison.right);
     break;
+  case SQL_AST_FILTER_TYPE_CONTAINS:
+    free(filter.value.contains.left.value.literal);
+    free(filter.value.contains.right.value.literal);
+    break;
   case SQL_AST_FILTER_TYPE_LOGIC:
     sql_ast_filter_free(*filter.value.logic.left);
     sql_ast_filter_free(*filter.value.logic.right);

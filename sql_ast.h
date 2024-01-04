@@ -67,6 +67,16 @@ struct sql_ast_operand {
   union sql_ast_operand_value value;
 };
 
+union sql_ast_text_operand_value {
+  char *column;
+  char *literal;
+};
+
+struct sql_ast_text_operand {
+  enum sql_ast_operand_type type;
+  union sql_ast_text_operand_value value;
+};
+
 enum sql_ast_comparison_operator {
   SQL_AST_COMPARISON_OPERATOR_EQUAL,
   SQL_AST_COMPARISON_OPERATOR_NOT_EQUAL,
@@ -80,6 +90,11 @@ struct sql_ast_comparison {
   enum sql_ast_comparison_operator operator;
   struct sql_ast_operand left;
   struct sql_ast_operand right;
+};
+
+struct sql_ast_contains {
+  struct sql_ast_text_operand left;
+  struct sql_ast_text_operand right;
 };
 
 enum sql_ast_logic_binary_operator {
@@ -96,11 +111,13 @@ struct sql_ast_logic {
 enum sql_ast_filter_type {
   SQL_AST_FILTER_TYPE_ALL,
   SQL_AST_FILTER_TYPE_COMPARISON,
+  SQL_AST_FILTER_TYPE_CONTAINS,
   SQL_AST_FILTER_TYPE_LOGIC
 };
 
 union sql_ast_filter_value {
   struct sql_ast_comparison comparison;
+  struct sql_ast_contains contains;
   struct sql_ast_logic logic;
 };
 

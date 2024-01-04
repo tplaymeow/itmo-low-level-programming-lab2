@@ -28,6 +28,7 @@ void yyerror_lexer(const char* s);
 "text" {return TEXT_TYPE;}
 "and" {return AND;}
 "or" {return OR;}
+"contains" {return CONTAINS;}
 "=" {return ASSIGN;}
 "==" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_EQUAL; return COMPARISON_OPERATOR;}
 "!=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_NOT_EQUAL; return COMPARISON_OPERATOR;}

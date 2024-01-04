@@ -186,6 +186,29 @@ static void serialize_operand(struct serialization_context *context,
   serialize_obj_end(context, is_last);
 }
 
+static void serialize_text_operand(struct serialization_context *context,
+                                   const char *name,
+                                   struct sql_ast_text_operand operand,
+                                   bool is_last) {
+  serialize_obj_field_begin(context, name);
+  switch (operand.type) {
+  case SQL_AST_OPERAND_TYPE_LITERAL:
+    serialize_obj_field_begin(context, "literal");
+    serialize_string_field(context, "type", "text", false);
+    serialize_string_field(context, "value", operand.value.literal, true);
+    serialize_obj_end(context, true);
+    break;
+  case SQL_AST_OPERAND_TYPE_COLUMN:
+    serialize_obj_field_begin(context, "column");
+    serialize_string_field(context, "column_name", operand.value.column, true);
+    serialize_obj_end(context, true);
+    break;
+  default:
+    break;
+  }
+  serialize_obj_end(context, is_last);
+}
+
 static void serialize_filter(struct serialization_context *context,
                              const char *name, struct sql_ast_filter filter,
                              bool is_last) {
@@ -203,6 +226,14 @@ static void serialize_filter(struct serialization_context *context,
             serialize_obj_end(context, true);
             serialize_obj_end(context, is_last);
             break;
+  case SQL_AST_FILTER_TYPE_CONTAINS:
+    serialize_obj_field_begin(context, name);
+    serialize_obj_field_begin(context, "contains");
+    serialize_text_operand(context, "left", filter.value.contains.left, false);
+    serialize_text_operand(context, "right", filter.value.contains.right, true);
+    serialize_obj_end(context, true);
+    serialize_obj_end(context, is_last);
+    break;
   case SQL_AST_FILTER_TYPE_LOGIC:
     serialize_obj_field_begin(context, name);
     serialize_obj_field_begin(context, "logic");
