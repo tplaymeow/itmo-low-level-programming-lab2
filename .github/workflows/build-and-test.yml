@@ -39,6 +39,7 @@ jobs:
             executable_path: ./Release/itmo_low_level_programming_lab2.exe
           - os: ubuntu-latest
             c_compiler: gcc
+            install_bison_flex: choco install winflexbison
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
