@@ -32,16 +32,16 @@ void yyerror_lexer(const char* s);
 "join" {return JOIN;}
 "on" {return ON;}
 "=" {return ASSIGN;}
+"(" {return LEFT_BRACKET;}
+")" {return RIGHT_BRACKET;}
+";" {return SEMICOLON;}
+"," {return COMMA;}
 "==" {return COMPARISON_OPERATOR_EQUAL;}
 "!=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_NOT_EQUAL; return COMPARISON_OPERATOR;}
 ">" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_GREATER; return COMPARISON_OPERATOR;}
 ">=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_GREATER_OR_EQUAL; return COMPARISON_OPERATOR;}
 "<" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_LESS; return COMPARISON_OPERATOR;}
 "<=" {yylval.comparison_operator_val = SQL_AST_COMPARISON_OPERATOR_LESS_OR_EQUAL; return COMPARISON_OPERATOR;}
-"(" {return LEFT_BRACKET;}
-")" {return RIGHT_BRACKET;}
-";" {return SEMICOLON;}
-"," {return COMMA;}
 "true" {yylval.boolean_val = true; return BOOLEAN_VAL;}
 "false" {yylval.boolean_val = false; return BOOLEAN_VAL;}
 [0-9]+\.[0-9]+ 	{yylval.floating_val = atof(yytext); return FLOATING_VAL;}
