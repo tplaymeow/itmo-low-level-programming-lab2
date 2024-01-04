@@ -180,4 +180,6 @@ struct sql_ast_statement {
   union sql_ast_statement_value value;
 };
 
+void sql_ast_statement_free(struct sql_ast_statement statement);
+
 #endif // ITMO_LOW_LEVEL_PROGRAMMING_LAB2_SQL_AST_H

@@ -78,6 +78,8 @@ input
     : statement SEMICOLON {
         struct serialization_context *ctx = serialization_context_create();
         serialize(ctx, $1);
+        serialization_context_destroy(ctx);
+        sql_ast_statement_free($1);
     }
     ;
 
