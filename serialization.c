@@ -254,13 +254,17 @@ serialize_select_statement(struct serialization_context *context,
   serialize_obj_field_begin(context, "select");
   serialize_string_field(context, "table_name", statement.table_name,
                          !statement.join.has_value &&
-                         statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
+                             statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
   if (statement.join.has_value) {
-      serialize_obj_field_begin(context, "join");
-      serialize_string_field(context, "join_table", statement.join.value.join_table, false);
-      serialize_string_field(context, "table_column", statement.join.value.table_column, false);
-      serialize_string_field(context, "join_table_column", statement.join.value.join_table_column, true);
-      serialize_obj_end(context, statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
+    serialize_obj_field_begin(context, "join");
+    serialize_string_field(context, "join_table",
+                           statement.join.value.join_table, false);
+    serialize_string_field(context, "table_column",
+                           statement.join.value.table_column, false);
+    serialize_string_field(context, "join_table_column",
+                           statement.join.value.join_table_column, true);
+    serialize_obj_end(context,
+                      statement.filter.type == SQL_AST_FILTER_TYPE_ALL);
   }
   serialize_filter(context, "filter", statement.filter, true);
   serialize_obj_end(context, true);
