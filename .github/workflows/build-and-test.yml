@@ -18,47 +18,47 @@ jobs:
           - os: ubuntu-latest
             c_compiler: gcc
             build_type: Release
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: ubuntu-latest
             c_compiler: clang
             build_type: Release
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: clang
             build_type: Release
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: gcc
             build_type: Release
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: windows-latest
             c_compiler: cl
             build_type: Release
-            executable_path: ./itmo_low_level_programming_lab2/Release/itmo_low_level_programming_lab2.exe
+            executable_path: ./Release/itmo_low_level_programming_lab2.exe
           - os: ubuntu-latest
             c_compiler: gcc
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: ubuntu-latest
             c_compiler: clang
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: clang
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
           - os: macos-latest
             c_compiler: gcc
             build_type: Debug
             sanitize-address: On
             sanitize-undefined: On
-            executable_path: ./itmo_low_level_programming_lab2/itmo_low_level_programming_lab2
+            executable_path: ./itmo_low_level_programming_lab2
 
     name: Build and Test (${{ matrix.os }}, ${{ matrix.build_type }}, ${{ matrix.c_compiler }})
 
