@@ -102,3 +102,4 @@ jobs:
           cat ../examples/in/8.sql | ${{ matrix.executable_path }}
           cat ../examples/in/9.sql | ${{ matrix.executable_path }}
           cat ../examples/in/10.sql | ${{ matrix.executable_path }}
+          cat ../examples/in/11.sql | ${{ matrix.executable_path }}
