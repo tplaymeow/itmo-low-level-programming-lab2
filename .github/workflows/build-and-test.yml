@@ -1,0 +1,92 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          - os: ubuntu-latest
+            c_compiler: gcc
+            build_type: Release
+            executable_path: ./database_test_app/database_test_app
+          - os: ubuntu-latest
+            c_compiler: clang
+            build_type: Release
+            executable_path: ./database_test_app/database_test_app
+          - os: macos-latest
+            c_compiler: clang
+            build_type: Release
+            executable_path: ./database_test_app/database_test_app
+          - os: macos-latest
+            c_compiler: gcc
+            build_type: Release
+            executable_path: ./database_test_app/database_test_app
+          - os: windows-latest
+            c_compiler: cl
+            build_type: Release
+            executable_path: ./database_test_app/Release/database_test_app.exe
+          - os: ubuntu-latest
+            c_compiler: gcc
+            build_type: Debug
+            sanitize-address: On
+            sanitize-undefined: On
+            executable_path: ./database_test_app/database_test_app
+          - os: ubuntu-latest
+            c_compiler: clang
+            build_type: Debug
+            sanitize-address: On
+            sanitize-undefined: On
+            executable_path: ./database_test_app/database_test_app
+          - os: macos-latest
+            c_compiler: clang
+            build_type: Debug
+            sanitize-address: On
+            sanitize-undefined: On
+            executable_path: ./database_test_app/database_test_app
+          - os: macos-latest
+            c_compiler: gcc
+            build_type: Debug
+            sanitize-address: On
+            sanitize-undefined: On
+            executable_path: ./database_test_app/database_test_app
+
+    name: Build and Test (${{ matrix.os }}, ${{ matrix.build_type }}, ${{ matrix.c_compiler }})
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set reusable strings
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -DSANITIZE_ADDRESS=${{ matrix.sanitize-address }}
+          -DSANITIZE_UNDEFINED=${{ matrix.sanitize-undefined }}
+          -S ${{ github.workspace }}
+
+      - name: Build
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+
+      - name: Test
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
+        run: |
+          echo "select from Users where (age > 18 and age <= 50) or (is_admin == true or name == "Admin" and age != 10);" | ${{ matrix.executable_path }}
